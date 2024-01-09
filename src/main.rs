@@ -28,9 +28,9 @@ impl EventHandler for Bot {
                     }
                 }
             }
-            //変換した結果、メッセージが変わっていた場合は、変換後のメッセージを送信する
+            //変換した結果、メッセージが変わっていた場合は、変換後のメッセージを送信者にメンションして送信する
             if result != msg.content {
-                if let Err(why) = msg.channel_id.say(&ctx.http, result).await {
+                if let Err(why) = msg.channel_id.say(&ctx.http, format!("{} {}", msg.author.mention(), result)).await {
                     error!("Error sending message: {:?}", why);
                 }
             }
@@ -79,3 +79,4 @@ fn convert_twitter_url(url: &str) -> anyhow::Result<String> {
     });
     Ok(result.to_string())
 }
+
